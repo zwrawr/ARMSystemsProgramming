@@ -72,11 +72,17 @@ void OS_start()
     _task_init_switch(OS_idleTCB_p);
 }
 
+void OS_initialiseTCB_defaultPriority(OS_TCB_t *TCB, uint32_t *const stack, void (* const func)(void const *const), void const *const data)
+{
+    OS_initialiseTCB(TCB, stack, 0x1 << 4, func, data);
+}
+
 /* Initialises a task control block (TCB) and its associated stack.  See os.h for details. */
-void OS_initialiseTCB(OS_TCB_t *TCB, uint32_t *const stack, void (* const func)(void const *const), void const *const data)
+void OS_initialiseTCB(OS_TCB_t *TCB, uint32_t *const stack, uint_fast8_t const priority, void (* const func)(void const *const), void const *const data)
 {
     TCB->sp = stack - (sizeof(OS_StackFrame_t) / sizeof(uint32_t));
-    TCB->priority = TCB->state = TCB->data = 0;
+    TCB->state = TCB->data = 0;
+    TCB->defaultPriority = TCB->currentPriority = priority;
     OS_StackFrame_t *sf = (OS_StackFrame_t *)(TCB->sp);
     memset(sf, 0, sizeof(OS_StackFrame_t));
     /* By placing the address of the task function in pc, and the address of _OS_task_end() in lr, the task

@@ -58,7 +58,8 @@ uint32_t OS_elapsedTicks(void);
      to this function.
    The third argument is a pointer to the function that the task should execute.
    The fourth argument is a void pointer to data that the task should receive. */
-void OS_initialiseTCB(OS_TCB_t *TCB, uint32_t *const stack, void (* const func)(void const *const), void const *const data);
+void OS_initialiseTCB(OS_TCB_t *TCB, uint32_t *const stack, uint_fast8_t const priority, void (* const func)(void const *const), void const *const data);
+void OS_initialiseTCB_defaultPriority(OS_TCB_t *TCB, uint32_t *const stack, void (* const func)(void const *const), void const *const data);
 
 /* SVC delegate to add a task */
 void __svc(OS_SVC_ADD_TASK) OS_addTask(OS_TCB_t const *const);

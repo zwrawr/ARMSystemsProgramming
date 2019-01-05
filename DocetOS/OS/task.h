@@ -40,7 +40,8 @@ typedef struct
     /* The remaining fields are provided for expandability.  None of them have a dedicated
        purpose, but their names might imply a use.  Feel free to use these fields for anything
        you like. */
-    uint32_t volatile priority;
+    uint_fast8_t volatile defaultPriority;
+    uint_fast8_t volatile currentPriority;
     uint32_t volatile data;
 } OS_TCB_t;
 
