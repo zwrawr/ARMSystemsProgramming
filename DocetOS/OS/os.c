@@ -1,8 +1,11 @@
+#include <stdlib.h>
+#include <string.h>
+
 #include "os.h"
 #include "os_internal.h"
 #include "stm32f4xx.h"
-#include <stdlib.h>
-#include <string.h>
+
+#include "simpleassert.h"
 
 __align(8)
 /* Idle task stack frame area and TCB.  The TCB is not declared const, to ensure that it is placed in writable
@@ -15,11 +18,16 @@ OS_TCB_t const *const OS_idleTCB_p = &OS_idleTCB;
 /* Total elapsed ticks */
 static volatile uint32_t _ticks = 0;
 
+
+/* Notify Check value*/
+static uint32_t check = 0;
+
 /* Pointer to the 'scheduler' struct containing callback pointers */
 static OS_Scheduler_t const *_scheduler = 0;
 
 /* GLOBAL: Holds pointer to current TCB.  DO NOT MODIFY, EVER. */
 OS_TCB_t *volatile _currentTCB = 0;
+
 /* Getter for the current TCB pointer.  Safer to use because it can't be used
    to change the pointer itself. */
 OS_TCB_t *OS_currentTCB()
@@ -32,6 +40,13 @@ uint32_t OS_elapsedTicks()
 {
     return _ticks;
 }
+
+/* Getter for the check value. */
+uint32_t OS_checkValue()
+{
+    return check;
+}
+
 
 /* IRQ handler for the system tick.  Schedules PendSV */
 void SysTick_Handler(void)
@@ -53,6 +68,19 @@ void _svc_OS_schedule(void)
     SCB->ICSR = SCB_ICSR_PENDSVSET_Msk;
 }
 
+
+void _svc_OS_wait(_OS_SVC_StackFrame_t const *const stack)
+{
+    _scheduler->wait_callback((OS_TCB_t *)stack->r0, (uint32_t)stack->r1);
+}
+
+void _svc_OS_notify(_OS_SVC_StackFrame_t const *const stack)
+{
+    check++;
+    _scheduler->notify_callback((OS_TCB_t *)stack->r0);
+    
+}
+
 /* Sets up the OS by storing a pointer to the structure containing all the callbacks.
    Also establishes the system tick timer and interrupt if preemption is enabled. */
 void OS_init(OS_Scheduler_t const *scheduler)
@@ -62,6 +90,8 @@ void OS_init(OS_Scheduler_t const *scheduler)
     ASSERT(_scheduler->scheduler_callback);
     ASSERT(_scheduler->addtask_callback);
     ASSERT(_scheduler->taskexit_callback);
+    ASSERT(_scheduler->wait_callback);
+    ASSERT(_scheduler->notify_callback);
 }
 
 /* Starts the OS and never returns. */
@@ -83,6 +113,8 @@ void OS_initialiseTCB(OS_TCB_t *TCB, uint32_t *const stack, uint_fast8_t const p
     TCB->sp = stack - (sizeof(OS_StackFrame_t) / sizeof(uint32_t));
     TCB->state = TCB->data = 0;
     TCB->defaultPriority = TCB->currentPriority = priority;
+    TCB->next = NULL;
+    
     OS_StackFrame_t *sf = (OS_StackFrame_t *)(TCB->sp);
     memset(sf, 0, sizeof(OS_StackFrame_t));
     /* By placing the address of the task function in pc, and the address of _OS_task_end() in lr, the task

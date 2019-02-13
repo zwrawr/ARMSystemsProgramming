@@ -333,7 +333,7 @@
             <v6WtE>0</v6WtE>
             <v6Rtti>0</v6Rtti>
             <VariousControls>
-              <MiscControls>--c99</MiscControls>
+              <MiscControls>--c99 --reduce_paths</MiscControls>
               <Define>STM32F407xx,STM32F4XX,HSE_VALUE=8000000,PLL_M=8,PLL_N=336,PLL_P=2,PLL_Q=7</Define>
               <Undefine></Undefine>
               <IncludePath>.\OS</IncludePath>
@@ -411,6 +411,36 @@
               <FilePath>.\priorityQueue.c</FilePath>
             </File>
             <File>
+              <FileName>hashmap.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\hashmap.c</FilePath>
+            </File>
+            <File>
+              <FileName>hashmap.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\hashmap.h</FilePath>
+            </File>
+            <File>
+              <FileName>message_queue.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\message_queue.c</FilePath>
+            </File>
+            <File>
+              <FileName>message_queue.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\message_queue.h</FilePath>
+            </File>
+            <File>
+              <FileName>memorypool.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\memorypool.c</FilePath>
+            </File>
+            <File>
+              <FileName>memorypool.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\memorypool.h</FilePath>
+            </File>
+            <File>
               <FileName>priorityQueue.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\priorityQueue.h</FilePath>
@@ -429,6 +459,26 @@
               <FileName>os.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\OS\os.c</FilePath>
+            </File>
+            <File>
+              <FileName>simpleassert.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\OS\simpleassert.h</FilePath>
+            </File>
+            <File>
+              <FileName>mutex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\OS\mutex.c</FilePath>
+            </File>
+            <File>
+              <FileName>semaphore.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\OS\semaphore.c</FilePath>
+            </File>
+            <File>
+              <FileName>semaphore.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\OS\semaphore.h</FilePath>
             </File>
           </Files>
         </Group>

@@ -14,7 +14,9 @@ enum OS_SVC_e
     OS_SVC_ADD_TASK,
     OS_SVC_EXIT,
     OS_SVC_YIELD,
-    OS_SVC_SCHEDULE
+    OS_SVC_SCHEDULE,
+    OS_SVC_WAIT,
+    OS_SVC_NOTIFY
 };
 
 /* A structure to hold callbacks for a scheduler, plus a 'preemptive' flag */
@@ -24,6 +26,8 @@ typedef struct
     OS_TCB_t const *(* scheduler_callback)(void);
     void (* addtask_callback)(OS_TCB_t *const newTask);
     void (* taskexit_callback)(OS_TCB_t *const task);
+    void (* wait_callback)(void *const reason, uint32_t check);
+    void (* notify_callback)(void *const reason);
 } OS_Scheduler_t;
 
 /***************************/
@@ -42,6 +46,9 @@ OS_TCB_t *OS_currentTCB(void);
 
 /* Returns the number of elapsed systicks since the last reboot (modulo 2^32). */
 uint32_t OS_elapsedTicks(void);
+
+/* Getter for the check value. */
+uint32_t OS_checkValue(void);
 
 /******************************************/
 /* Task creation and management functions */
@@ -70,6 +77,8 @@ void __svc(OS_SVC_ADD_TASK) OS_addTask(OS_TCB_t const *const);
 
 /* SVC delegate to yield the current task */
 void __svc(OS_SVC_YIELD) OS_yield(void);
+void __svc(OS_SVC_WAIT) OS_wait(void *reason, uint32_t check);
+void __svc(OS_SVC_NOTIFY) OS_notify(void *reason);
 
 /****************/
 /* Declarations */

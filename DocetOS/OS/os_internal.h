@@ -4,8 +4,6 @@
 #include "os.h"
 #include "task.h"
 
-#define ASSERT(x) do{if(!(x))__breakpoint(0);}while(0)
-
 #include "stm32f4xx.h"
 
 typedef struct

@@ -28,7 +28,8 @@ typedef struct s_StackFrame
     volatile uint32_t psr;
 } OS_StackFrame_t;
 
-typedef struct
+typedef struct OS_TCB_t OS_TCB_t;
+struct OS_TCB_t
 {
     /* Task stack pointer.  It's important that this is the first entry in the structure,
        so that a simple double-dereference of a TCB pointer yields a stack pointer. */
@@ -37,15 +38,24 @@ typedef struct
        runnable, or whatever.  Only one bit of this field is currently defined (see the #define
        below), so you can use the remaining 31 bits for anything you like. */
     uint32_t volatile state;
-    /* The remaining fields are provided for expandability.  None of them have a dedicated
-       purpose, but their names might imply a use.  Feel free to use these fields for anything
-       you like. */
+    
+    /* the prioority this task should start with and will return too once run ]
+            lower values have more priority */
     uint_fast8_t volatile defaultPriority;
+    
+    /* the current priority of the task, may be lower than default if the task has aged. */
     uint_fast8_t volatile currentPriority;
+    
+    /* data stores intermediate data such as when a task wants to be woken up */
     uint32_t volatile data;
-} OS_TCB_t;
+    
+    /* pointer to next task in the chain */
+    OS_TCB_t   *volatile next;
+};
 
 /* Constants that define bits in a thread's 'state' field. */
 #define TASK_STATE_YIELD    (1UL << 0) // Bit zero is the 'yield' flag
+#define TASK_STATE_SLEEP    (1UL << 1) // Bit one is the 'sleep' flag
+#define TASK_STATE_WAIT    (1UL << 2) // Bit one is the 'wait' flag
 
 #endif /* _TASK_H_ */
