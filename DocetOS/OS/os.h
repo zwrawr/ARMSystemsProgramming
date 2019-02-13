@@ -14,7 +14,9 @@ enum OS_SVC_e
     OS_SVC_ADD_TASK,
     OS_SVC_EXIT,
     OS_SVC_YIELD,
-    OS_SVC_SCHEDULE
+    OS_SVC_SCHEDULE,
+    OS_SVC_WAIT,
+    OS_SVC_NOTIFY
 };
 
 /* A structure to hold callbacks for a scheduler, plus a 'preemptive' flag */
@@ -24,6 +26,8 @@ typedef struct
     OS_TCB_t const *(* scheduler_callback)(void);
     void (* addtask_callback)(OS_TCB_t *const newTask);
     void (* taskexit_callback)(OS_TCB_t *const task);
+    void (* wait_callback)(void *const reason, uint32_t check);
+    void (* notify_callback)(void *const reason);
 } OS_Scheduler_t;
 
 /***************************/
@@ -43,6 +47,9 @@ OS_TCB_t *OS_currentTCB(void);
 /* Returns the number of elapsed systicks since the last reboot (modulo 2^32). */
 uint32_t OS_elapsedTicks(void);
 
+/* Getter for the check value. */
+uint32_t OS_checkValue(void);
+
 /******************************************/
 /* Task creation and management functions */
 /******************************************/
@@ -58,7 +65,8 @@ uint32_t OS_elapsedTicks(void);
      to this function.
    The third argument is a pointer to the function that the task should execute.
    The fourth argument is a void pointer to data that the task should receive. */
-void OS_initialiseTCB(OS_TCB_t *TCB, uint32_t *const stack, void (* const func)(void const *const), void const *const data);
+void OS_initialiseTCB(OS_TCB_t *TCB, uint32_t *const stack, uint_fast8_t const priority, void (* const func)(void const *const), void const *const data);
+void OS_initialiseTCB_defaultPriority(OS_TCB_t *TCB, uint32_t *const stack, void (* const func)(void const *const), void const *const data);
 
 /* SVC delegate to add a task */
 void __svc(OS_SVC_ADD_TASK) OS_addTask(OS_TCB_t const *const);
@@ -69,6 +77,8 @@ void __svc(OS_SVC_ADD_TASK) OS_addTask(OS_TCB_t const *const);
 
 /* SVC delegate to yield the current task */
 void __svc(OS_SVC_YIELD) OS_yield(void);
+void __svc(OS_SVC_WAIT) OS_wait(void *reason, uint32_t check);
+void __svc(OS_SVC_NOTIFY) OS_notify(void *reason);
 
 /****************/
 /* Declarations */

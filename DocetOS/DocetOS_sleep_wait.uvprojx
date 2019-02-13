@@ -10,12 +10,13 @@
       <TargetName>STM32F407 Flash</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
-      <pCCUsed>5060300::V5.06 update 3 (build 300)::ARMCC</pCCUsed>
+      <pArmCC>5060422::V5.06 update 4 (build 422)::ARMCC</pArmCC>
+      <pCCUsed>5060422::V5.06 update 4 (build 422)::ARMCC</pCCUsed>
       <TargetOption>
         <TargetCommonOption>
           <Device>STM32F407VG</Device>
           <Vendor>STMicroelectronics</Vendor>
-          <PackID>Keil.STM32F4xx_DFP.2.10.0</PackID>
+          <PackID>Keil.STM32F4xx_DFP.2.11.0</PackID>
           <PackURL>http://www.keil.com/pack</PackURL>
           <Cpu>IRAM(0x20000000,0x20000) IRAM2(0x10000000,0x10000) IROM(0x08000000,0x100000) CPUTYPE("Cortex-M4") FPU2 CLOCK(12000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
@@ -332,7 +333,7 @@
             <v6WtE>0</v6WtE>
             <v6Rtti>0</v6Rtti>
             <VariousControls>
-              <MiscControls>--c99</MiscControls>
+              <MiscControls>--c99 --reduce_paths</MiscControls>
               <Define>STM32F407xx,STM32F4XX,HSE_VALUE=8000000,PLL_M=8,PLL_N=336,PLL_P=2,PLL_Q=7</Define>
               <Undefine></Undefine>
               <IncludePath>.\OS</IncludePath>
@@ -404,6 +405,46 @@
               <FileType>1</FileType>
               <FilePath>.\simpleRoundRobin.c</FilePath>
             </File>
+            <File>
+              <FileName>priorityQueue.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\priorityQueue.c</FilePath>
+            </File>
+            <File>
+              <FileName>hashmap.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\hashmap.c</FilePath>
+            </File>
+            <File>
+              <FileName>hashmap.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\hashmap.h</FilePath>
+            </File>
+            <File>
+              <FileName>message_queue.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\message_queue.c</FilePath>
+            </File>
+            <File>
+              <FileName>message_queue.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\message_queue.h</FilePath>
+            </File>
+            <File>
+              <FileName>memorypool.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\memorypool.c</FilePath>
+            </File>
+            <File>
+              <FileName>memorypool.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\memorypool.h</FilePath>
+            </File>
+            <File>
+              <FileName>priorityQueue.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\priorityQueue.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -418,6 +459,26 @@
               <FileName>os.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\OS\os.c</FilePath>
+            </File>
+            <File>
+              <FileName>simpleassert.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\OS\simpleassert.h</FilePath>
+            </File>
+            <File>
+              <FileName>mutex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\OS\mutex.c</FilePath>
+            </File>
+            <File>
+              <FileName>semaphore.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\OS\semaphore.c</FilePath>
+            </File>
+            <File>
+              <FileName>semaphore.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\OS\semaphore.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -460,16 +521,16 @@
     <files>
       <file attr="config" category="source" condition="STM32F407xx_ARMCC" name="Drivers\CMSIS\Device\ST\STM32F4xx\Source\Templates\arm\startup_stm32f407xx.s" version="2.5.0">
         <instance index="0">RTE\Device\STM32F407VG\startup_stm32f407xx.s</instance>
-        <component Cclass="Device" Cgroup="Startup" Cvendor="Keil" Cversion="2.5.0" condition="STM32F4 CMSIS"/>
-        <package name="STM32F4xx_DFP" schemaVersion="1.3" url="http://www.keil.com/pack" vendor="Keil" version="2.10.0"/>
+        <component Cclass="Device" Cgroup="Startup" Cvendor="Keil" Cversion="2.6.0" condition="STM32F4 CMSIS"/>
+        <package name="STM32F4xx_DFP" schemaVersion="1.3" url="http://www.keil.com/pack" vendor="Keil" version="2.11.0"/>
         <targetInfos>
           <targetInfo name="STM32F407 Flash"/>
         </targetInfos>
       </file>
       <file attr="config" category="source" name="Drivers\CMSIS\Device\ST\STM32F4xx\Source\Templates\system_stm32f4xx.c" version="2.5.0">
         <instance index="0">RTE\Device\STM32F407VG\system_stm32f4xx.c</instance>
-        <component Cclass="Device" Cgroup="Startup" Cvendor="Keil" Cversion="2.5.0" condition="STM32F4 CMSIS"/>
-        <package name="STM32F4xx_DFP" schemaVersion="1.3" url="http://www.keil.com/pack" vendor="Keil" version="2.10.0"/>
+        <component Cclass="Device" Cgroup="Startup" Cvendor="Keil" Cversion="2.6.0" condition="STM32F4 CMSIS"/>
+        <package name="STM32F4xx_DFP" schemaVersion="1.3" url="http://www.keil.com/pack" vendor="Keil" version="2.11.0"/>
         <targetInfos>
           <targetInfo name="STM32F407 Flash"/>
         </targetInfos>
